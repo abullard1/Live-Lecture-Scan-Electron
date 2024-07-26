@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="032d19b3-4e95-4230-9e33-a07424fec24d" name="Changes" comment="Add unversioned files" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;abullard1&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/abullard1/live_lecture_scan_electron.git&quot;,
+    &quot;accountId&quot;: &quot;d2cc8c5a-b3b3-4741-ad82-310b5c20d04b&quot;
+  }
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2fpVcvjb8IKcKrDW3VZik2BR6nE" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Node.js.index.js.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/samue/WebstormProjects/live_lecture_scan/index.js",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.Electron App.executor": "Run",
+    "npm.Vite Dev Server.executor": "Run",
+    "npm.dev.executor": "Run",
+    "npm.start.executor": "Run",
+    "npm.test.executor": "Run",
+    "settings.editor.selected.configurable": "settings.nodejs",
+    "ts.external.directory.path": "C:\\Users\\samue\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\samue\WebstormProjects\live_lecture_scan" />
+      <recent name="C:\Users\samue\WebstormProjects\live_lecture_scan\dist" />
+      <recent name="C:\Users\samue\WebstormProjects\live_lecture_scan\src" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.start">
+    <configuration name="Electron App" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Vite Dev Server" type="js.build_tools.npm" temporary="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="npm.Electron App" />
+      <item itemvalue="npm.start" />
+      <item itemvalue="npm.Vite Dev Server" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.Vite Dev Server" />
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.Vite Dev Server" />
+        <item itemvalue="npm.Vite Dev Server" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.18034.50" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="032d19b3-4e95-4230-9e33-a07424fec24d" name="Changes" comment="" />
+      <created>1714498089298</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1714498089298</updated>
+      <workItem from="1714498090358" duration="624000" />
+      <workItem from="1714498734774" duration="1578000" />
+      <workItem from="1714747688099" duration="508000" />
+      <workItem from="1714748213037" duration="1201000" />
+      <workItem from="1714983008803" duration="482000" />
+      <workItem from="1714983522403" duration="1446000" />
+      <workItem from="1715792916677" duration="672000" />
+      <workItem from="1718299252481" duration="16000" />
+      <workItem from="1721998834713" duration="593000" />
+      <workItem from="1721999630208" duration="988000" />
+      <workItem from="1722000637985" duration="17000" />
+      <workItem from="1722000725260" duration="8696000" />
+      <workItem from="1722010961863" duration="574000" />
+      <workItem from="1722011562917" duration="612000" />
+    </task>
+    <task id="LOCAL-00001" summary="Live Lecture Scan Project Setup">
+      <option name="closed" value="true" />
+      <created>1714499859061</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1714499859061</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Initial Functioning Commit and Layout Vite Vue Electron">
+      <option name="closed" value="true" />
+      <created>1722011593579</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1722011593580</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add package.json">
+      <option name="closed" value="true" />
+      <created>1722011653274</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1722011653274</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Add .gitignore">
+      <option name="closed" value="true" />
+      <created>1722011996879</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1722011996879</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add unversioned files">
+      <option name="closed" value="true" />
+      <created>1722012174692</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1722012174692</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Live Lecture Scan Project Setup" />
+    <MESSAGE value="Initial Functioning Commit and Layout Vite Vue Electron" />
+    <MESSAGE value="Add package.json" />
+    <MESSAGE value="Add .gitignore" />
+    <MESSAGE value="Add unversioned files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add unversioned files" />
+  </component>
+</project>
