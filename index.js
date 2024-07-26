@@ -1,32 +1,38 @@
 const { app, BrowserWindow } = require('electron');
+const path = require('path');
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            contextIsolation: false // Required if using nodeIntegration
         }
     });
 
-    // Loads the index.html of the app.
-    mainWindow.loadFile('index.html');
+    // Determine URL based on environment
+    const devPath = 'http://localhost:3000'; // Adjust if your port is different
+    const prodPath = `file://${path.join(__dirname, 'dist/index.html')}`;
+    const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+    const url = isDevelopment ? devPath : prodPath;
 
-    // Open the DevTools (remove this line for production).
-    mainWindow.webContents.openDevTools();
+    mainWindow.loadURL(url);
+
+    // Open the DevTools.
+    if (isDevelopment) {
+        mainWindow.webContents.openDevTools();
+    }
 }
 
-// Creates the window when the app is ready a and initialized.
 app.whenReady().then(createWindow);
 
-// Quits the application when all windows are closed (except on macOS).
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
     }
 });
 
-// Re-creates a window when the dock icon is clicked (only on macOS).
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
