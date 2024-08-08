@@ -15,6 +15,12 @@
         <div class="scrollable-text" id="scrollable-text">
           <p v-for="i in 100" :key="i">This is a long text {{ i }}</p>
         </div>
+        <!-- Info Div -->
+        <div id="info" class="info">
+          <p>Scroll position: <span id="scroll-position">0</span></p>
+          <p>Scroll height: <span id="scroll-height">0</span></p>
+          <p>Client height: <span id="client-height">0</span></p>
+        </div>
       </div>
     </div>
   </div>
@@ -22,7 +28,7 @@
 
 <script>
 export default {
-  name: 'App',
+  name: "App",
   mounted() {
     this.startWebcam();
   },
@@ -32,7 +38,7 @@ export default {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         this.$refs.webcam.srcObject = stream;
       } catch (error) {
-        console.error('Error accessing webcam:', error);
+        console.error("Error accessing webcam:", error);
       }
     }
   }
@@ -42,7 +48,7 @@ export default {
 <style>
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f5f5f5;
@@ -139,5 +145,15 @@ body {
 .scrollable-text::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 4px;
+}
+
+.info {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  background-color: #ffffff;
+  padding: 1em;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 </style>
