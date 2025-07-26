@@ -21,9 +21,17 @@ const electronAPI = {
 
 // Custom APIs for the 'live lecture scan (LLS)' app
 const api = {
-  // File operations (for saving scanned text)
+  // File operation: Saving scanned text to a file
+  // => is a shorthand and ist equivalent to function(content, filename) {
+  //     return ipcRenderer.invoke('save-text-file', content, filename);
+  //   }
+  // So its just a function with parameters that returns something
   saveTextFile: (content, filename) =>
     ipcRenderer.invoke('save-text-file', content, filename),
+
+
+
+  // File operation: Opening a file dialog to select a file
   openFile: () => ipcRenderer.invoke('open-file'),
 
   // App-specific features
@@ -40,6 +48,7 @@ const api = {
 // This prevents the renderer process from accessing Node.js APIs directly, enhancing security
 if (process.contextIsolated) {
   try {
+    // Exposes the apis we defined above to the renderer process
     contextBridge.exposeInMainWorld('electron', electronAPI);
     contextBridge.exposeInMainWorld('api', api);
     console.log('🔒 Context bridge APIs exposed securely');

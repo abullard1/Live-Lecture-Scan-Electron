@@ -1,0 +1,50 @@
+# This workflow builds and releases the electron app for each platform (Linux, macOS, Windows)
+# Dev build with build artifacts available in Actions tab
+name: Build and Release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [published]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.12.0' # The version of Node.js I used during the development of this app
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: npm run dist:linux
+
+      - name: Build for macOS
+        if: matrix.os == 'macos-latest'
+        run: npm run dist:mac
+
+      - name: Build for Windows
+        if: matrix.os == 'windows-latest'
+        run: npm run dist:win
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: electron-app-${{ matrix.os }}
+          path: dist/
+          retention-days: 30

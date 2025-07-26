@@ -1,8 +1,7 @@
 "use strict";
 const electron = require("electron");
 const path = require("path");
-const isDevelopment =
-  process.env.NODE_ENV === "development" || !electron.app.isPackaged;
+const isDevelopment = process.env.NODE_ENV === "development" || !electron.app.isPackaged;
 const isWindows = process.platform === "win32";
 const isMacOS = process.platform === "darwin";
 const isLinux = process.platform === "linux";
@@ -17,12 +16,7 @@ function setupDeveloperShortcuts(window) {
       window.webContents.toggleDevTools();
       event.preventDefault();
     }
-    if (
-      input.key === "r" &&
-      (input.control || input.meta) &&
-      !input.shift &&
-      !input.alt
-    ) {
+    if (input.key === "r" && (input.control || input.meta) && !input.shift && !input.alt) {
       window.webContents.reload();
       event.preventDefault();
     }
@@ -72,9 +66,9 @@ function createWindow() {
       // Security: no Node.js in renderer
       webSecurity: isDevelopment ? false : true,
       // Allows local resources to load in development (e.g., local files, mixed content). In Production, everything is bundled in the dist folder, and served from the same origin.
-      allowRunningInsecureContent: isDevelopment,
+      allowRunningInsecureContent: isDevelopment
       // Allows mixed content resources to be loaded in development (e.g., HTTP resources in HTTPS pages e.g. ). In production, this is disabled to prevent man in the middle attacks.
-    },
+    }
   });
   mainWindow.once("ready-to-show", () => {
     mainWindow.show();
@@ -99,7 +93,7 @@ function createWindow() {
   if (isDevelopment && process.env["ELECTRON_RENDERER_URL"]) {
     console.log(
       "🔥 Loading development server:",
-      process.env["ELECTRON_RENDERER_URL"],
+      process.env["ELECTRON_RENDERER_URL"]
     );
     mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
     setTimeout(() => {
@@ -131,11 +125,11 @@ electron.app.whenReady().then(() => {
   console.log("⚡ Electron app ready");
   console.log(`🖥️  Platform: ${process.platform}`);
   console.log(
-    `🔧 Environment: ${isDevelopment ? "development" : "production"}`,
+    `🔧 Environment: ${isDevelopment ? "development" : "production"}`
   );
   setupPlatformSpecificBehavior();
   createWindow();
-  electron.app.on("activate", function () {
+  electron.app.on("activate", function() {
     console.log("🔄 App activated");
     if (electron.BrowserWindow.getAllWindows().length === 0) {
       createWindow();
