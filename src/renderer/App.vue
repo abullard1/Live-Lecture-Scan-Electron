@@ -1,5 +1,7 @@
 <template>
+  <!-- Main container for the app -->
   <div class="app">
+    <!-- Columns layout for the app -->
     <div class="columns">
       <div class="column">
         <div class="sub-columns">
@@ -29,13 +31,15 @@ export default {
   methods: {
     async startWebcam() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
         this.$refs.webcam.srcObject = stream;
       } catch (error) {
         console.error('Error accessing webcam:', error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
