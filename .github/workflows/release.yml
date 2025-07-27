@@ -38,7 +38,7 @@ jobs:
           fi
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.ACTION_RUNNER_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v1
@@ -46,4 +46,4 @@ jobs:
         with:
           files: dist/*
         env:
-          GITHUB_TOKEN: ${{ secrets.ACTION_RUNNER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
