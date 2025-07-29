@@ -17,7 +17,7 @@ const electronAPI = {
     electron: process.versions.electron
     // Holds the Electron version
   }
-};
+}; // Test
 const api = {
   // File operation: Saving scanned text to a file
   // => is a shorthand and ist equivalent to function(content, filename) {
