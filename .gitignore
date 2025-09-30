@@ -7,3 +7,16 @@ workspace.xml
 .idea/dictionaries
 /notes
 out/
+java/out/
+java/dist/
+/dist/
+/out/
+/java/dist/
+/java/out/
+*.AppImage
+*.deb
+npm-debug.log*
+yarn-error.log*
+.DS_Store
+*.iml
+/.vscode/

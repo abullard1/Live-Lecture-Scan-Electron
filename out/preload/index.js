@@ -20,7 +20,7 @@ const electronAPI = {
 }; // Test
 const api = {
   // File operation: Saving scanned text to a file
-  // => is a shorthand and ist equivalent to function(content, filename) {
+  // => is a shorthand and is equivalent to function(content, filename) {
   //     return ipcRenderer.invoke('save-text-file', content, filename);
   //   }
   // So its just a function with parameters that returns something
@@ -28,7 +28,10 @@ const api = {
   // File operation: Opening a file dialog to select a file
   openFile: () => electron.ipcRenderer.invoke("open-file"),
   // App-specific features
-  showNotification: (title, body) => electron.ipcRenderer.invoke("show-notification", title, body)
+  showNotification: (title, body) => electron.ipcRenderer.invoke("show-notification", title, body),
+  // OCR Correction feature
+  setCorrectionEnabled: (enabled) => electron.ipcRenderer.send("ocr-correction:set-enabled", !!enabled),
+  runCorrection: (payload) => electron.ipcRenderer.invoke("ocr-correction:run", payload)
   // Future OCR/camera features will go here
   // processImage: (imageData) => ipcRenderer.invoke('process-image', imageData),
 };

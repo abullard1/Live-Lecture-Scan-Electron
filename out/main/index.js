@@ -1,10 +1,210 @@
 "use strict";
 const electron = require("electron");
+const child_process = require("child_process");
+const fs = require("fs");
 const path = require("path");
 const isDevelopment = process.env.NODE_ENV === "development" || !electron.app.isPackaged;
 const isWindows = process.platform === "win32";
 const isMacOS = process.platform === "darwin";
 const isLinux = process.platform === "linux";
+let correctionEnabled = true;
+const CORRECTION_TIMEOUT_MS = 5e3;
+const resolveJavaRuntime = () => {
+  const basePath = electron.app.getAppPath();
+  const distCandidates = [
+    process.env.JOCKAIGNE_DIST && path.join(process.env.JOCKAIGNE_DIST, ""),
+    path.join(basePath, "java", "dist"),
+    path.join(process.cwd(), "java", "dist")
+  ].filter(Boolean);
+  let distDir = distCandidates[0];
+  let processorJar = null;
+  let libraryJar = null;
+  for (const candidate of distCandidates) {
+    const candidateProcessor = path.join(candidate, "jockaigne-processor.jar");
+    const candidateLibrary = path.join(candidate, "Jockaigne-1.0.jar");
+    if (fs.existsSync(candidateProcessor) && fs.existsSync(candidateLibrary)) {
+      distDir = candidate;
+      processorJar = candidateProcessor;
+      libraryJar = candidateLibrary;
+      break;
+    }
+  }
+  processorJar = process.env.JOCKAIGNE_JAR || processorJar || path.join(distDir, "jockaigne-processor.jar");
+  libraryJar = process.env.JOCKAIGNE_LIB || libraryJar || path.join(distDir, "Jockaigne-1.0.jar");
+  if (!fs.existsSync(processorJar)) {
+    return {
+      error: "Jockaigne processor jar not found. Run npm run build:java first."
+    };
+  }
+  if (!fs.existsSync(libraryJar)) {
+    return {
+      error: "Jockaigne runtime jar not found. Ensure Jockaigne-1.0.jar is available."
+    };
+  }
+  const classpath = [processorJar, libraryJar].join(path.delimiter);
+  const mainClass = process.env.JOCKAIGNE_MAIN || "JockaigneProcessor";
+  const bundled = resolveBundledJava(distDir);
+  const exec = bundled?.exec ?? resolveJavaExecutable();
+  return { classpath, mainClass, exec, runtimeHome: bundled?.runtimeRoot ?? null };
+};
+const resolveBundledJava = (distDir) => {
+  const runtimeRoot = process.env.JOCKAIGNE_RUNTIME || distDir && path.join(distDir, "runtime");
+  if (!runtimeRoot) {
+    return null;
+  }
+  const candidate = path.join(
+    runtimeRoot,
+    "bin",
+    process.platform === "win32" ? "java.exe" : "java"
+  );
+  if (fs.existsSync(candidate)) {
+    return { exec: candidate, runtimeRoot };
+  }
+  return null;
+};
+const resolveJavaExecutable = () => {
+  const javaHome = process.env.JAVA_HOME;
+  if (javaHome) {
+    const candidate = path.join(
+      javaHome,
+      "bin",
+      process.platform === "win32" ? "java.exe" : "java"
+    );
+    if (fs.existsSync(candidate)) {
+      return candidate;
+    }
+  }
+  const detected = detectLocalJdk();
+  if (detected && fs.existsSync(detected)) {
+    return detected;
+  }
+  return "java";
+};
+const detectLocalJdk = () => {
+  const homeDir = process.env.HOME || process.env.USERPROFILE;
+  if (!homeDir) return null;
+  const jdksDir = path.join(homeDir, ".jdks");
+  if (!fs.existsSync(jdksDir)) return null;
+  try {
+    const entries = fs.readdirSync(jdksDir, { withFileTypes: true }).filter((entry) => entry.isDirectory() && entry.name.startsWith("jdk-24")).map((entry) => path.join(jdksDir, entry.name)).sort((a, b) => b.localeCompare(a));
+    if (entries.length === 0) {
+      return null;
+    }
+    const javaBinary = path.join(
+      entries[0],
+      "bin",
+      process.platform === "win32" ? "java.exe" : "java"
+    );
+    return javaBinary;
+  } catch {
+    return null;
+  }
+};
+function cleanOutput(value) {
+  return typeof value === "string" ? value.trim() : value;
+}
+electron.ipcMain.on("ocr-correction:set-enabled", (_event, enabled) => {
+  correctionEnabled = !!enabled;
+});
+electron.ipcMain.handle("ocr-correction:run", async (_event, payload = {}) => {
+  const text = payload?.text ?? "";
+  if (!text) {
+    return { text: "", corrected: false, error: "No text provided." };
+  }
+  if (!correctionEnabled) {
+    return { text, corrected: false };
+  }
+  try {
+    const meta = payload.meta || {};
+    return await runJockaigne(text, meta);
+  } catch (error) {
+    return { text, corrected: false, error: error?.message || String(error) };
+  }
+});
+async function runJockaigne(text, meta = {}) {
+  const runtime = resolveJavaRuntime();
+  if (!runtime || runtime.error) {
+    const errorMessage = runtime?.error || "Unable to resolve JockaigneProcessor runtime.";
+    return { text, corrected: false, error: errorMessage };
+  }
+  return new Promise((resolve) => {
+    const child = child_process.spawn(
+      runtime.exec,
+      ["-cp", runtime.classpath, runtime.mainClass],
+      {
+        stdio: ["pipe", "pipe", "pipe"],
+        env: {
+          ...process.env,
+          ...runtime.runtimeHome ? { JAVA_HOME: runtime.runtimeHome } : {}
+        }
+      }
+    );
+    let stdout = "";
+    let stderr = "";
+    let finished = false;
+    const finalize = (result) => {
+      if (finished) return;
+      finished = true;
+      resolve(result);
+    };
+    const timeout = setTimeout(() => {
+      child.kill("SIGKILL");
+      finalize({
+        text,
+        corrected: false,
+        error: "JockaigneProcessor correction timed out."
+      });
+    }, CORRECTION_TIMEOUT_MS);
+    child.stdout.on("data", (data) => {
+      stdout += data.toString();
+    });
+    child.stderr.on("data", (data) => {
+      stderr += data.toString();
+    });
+    child.on("error", (err) => {
+      clearTimeout(timeout);
+      finalize({ text, corrected: false, error: err.message });
+    });
+    child.on("close", (code) => {
+      clearTimeout(timeout);
+      const cleanedStdout = cleanOutput(stdout);
+      const cleanedStderr = cleanOutput(stderr);
+      if (code !== 0) {
+        finalize({
+          text,
+          corrected: false,
+          error: cleanedStderr || `JockaigneProcessor exited with code ${code}`
+        });
+        return;
+      }
+      try {
+        const parsed = JSON.parse(cleanedStdout);
+        if (!parsed || typeof parsed.text !== "string") {
+          throw new Error("Missing text field in processor response.");
+        }
+        finalize({
+          text: parsed.text,
+          original: parsed.original ?? text,
+          corrected: parsed.text !== text,
+          diagnostics: parsed.diagnostics ?? null,
+          suggestions: Array.isArray(parsed.suggestions) ? parsed.suggestions : [],
+          diagnosticsLog: cleanedStderr || null
+        });
+      } catch (parseError) {
+        finalize({
+          text,
+          corrected: false,
+          error: "Failed to parse JockaigneProcessor output.",
+          diagnosticsLog: cleanedStderr || null
+        });
+      }
+    });
+    const payload = JSON.stringify({ text, meta });
+    child.stdin.write(`${payload}
+`);
+    child.stdin.end();
+  });
+}
 function setupDeveloperShortcuts(window) {
   if (!isDevelopment) return;
   window.webContents.on("before-input-event", (event, input) => {
@@ -59,7 +259,7 @@ function createWindow() {
       sandbox: true,
       // Security: Renderer runs in a restricted, sandboxed environment
       contextIsolation: true,
-      // Security: Creates separate JavaScript context for the app vs Electron APIs (Prevents malicious code from accessing Electron NodeJS APIs directly)
+      // Security: Creates separate JavaScript context for the app vs Electron APIs (Prevents malicious code from accessing Electron NodeJS APIs directly) (https://www.electronjs.org/docs/latest/tutorial/process-model#:~:text=Although%20preload%20scripts%20share%20a%20window%20global%20with%20the%20renderer%20they%27re%20attached%20to%2C%20you%20cannot%20directly%20attach%20any%20variables%20from%20the%20preload%20script%20to%20window%20because%20of%20the%20contextIsolation%20default.)
       enableRemoteModule: false,
       // Security: Old way to access main process from renderer (deprecated). Now IPC (Inter-Process Communication) is used instead.
       nodeIntegration: false,

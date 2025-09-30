@@ -1,5 +1,11 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
+// The preload script runs just before the webconten is loaded and can access NodeJS APIs
+// We use the `contextBridge` API to expose only specific, safe APIs to the renderer process
+
+// Here, we define a set of APIs that the renderer can use to interact with
+// This way, we can control what functionality the renderer process has access to
+
 // Exposes protected methods that allow the renderer process to use
 // the ipcRenderer (Inter Process Communication Renderer) without exposing the entire object
 const electronAPI = {
@@ -19,17 +25,15 @@ const electronAPI = {
   },
 };
 
-// Custom APIs for the 'live lecture scan (LLS)' app
+// Custom APIs
 const api = {
   // File operation: Saving scanned text to a file
-  // => is a shorthand and ist equivalent to function(content, filename) {
+  // => is a shorthand and is equivalent to function(content, filename) {
   //     return ipcRenderer.invoke('save-text-file', content, filename);
   //   }
   // So its just a function with parameters that returns something
   saveTextFile: (content, filename) =>
     ipcRenderer.invoke('save-text-file', content, filename),
-
-
 
   // File operation: Opening a file dialog to select a file
   openFile: () => ipcRenderer.invoke('open-file'),
@@ -37,6 +41,11 @@ const api = {
   // App-specific features
   showNotification: (title, body) =>
     ipcRenderer.invoke('show-notification', title, body),
+
+  // OCR Correction feature
+  setCorrectionEnabled: enabled =>
+    ipcRenderer.send('ocr-correction:set-enabled', !!enabled),
+  runCorrection: payload => ipcRenderer.invoke('ocr-correction:run', payload),
 
   // Future OCR/camera features will go here
   // processImage: (imageData) => ipcRenderer.invoke('process-image', imageData),

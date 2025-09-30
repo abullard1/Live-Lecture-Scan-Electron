@@ -5,7 +5,6 @@ on:
   push:
     tags:
       - 'v*'
-      -
 
 permissions:
   contents: write
@@ -27,10 +26,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.12.0' # The version of Node.js I used during the development of this app
-          cache: 'npm'
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '24' # Java Version used
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
+
+      - name: Fix macOS optional dependencies
+        if: matrix.os == 'macos-latest'
+        run: |
+          npm install @rollup/rollup-darwin-arm64 --save-optional
+          npm install dmg-license --save-optional
+
+      - name: Fix Windows optional dependencies
+        if: matrix.os == 'windows-latest'
+        run: npm install @rollup/rollup-win32-x64-msvc --save-optional
+
+      - name: Fix Linux optional dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: npm install @rollup/rollup-linux-x64-gnu --save-optional
 
       - name: Build and publish
         run: |
